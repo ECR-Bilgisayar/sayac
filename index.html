@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sayaç</title>
+
+<style>
+    @font-face {
+        font-family: 'Whitney';
+        src: url('Whitney-Bold-Pro.otf') format('opentype');
+        font-weight: 700;
+        font-style: normal;
+        font-display: block;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html, body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    body {
+        background-image: url('background.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: #1a2332;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Whitney', sans-serif;
+    }
+
+    .counter {
+        font-family: 'Whitney', sans-serif;
+        font-weight: 700;
+        color: #00c2e7;
+        font-size: 18vw;
+        letter-spacing: 0.02em;
+        line-height: 1;
+        text-align: center;
+        font-variant-numeric: tabular-nums;
+        font-feature-settings: "tnum";
+        user-select: none;
+    }
+</style>
+</head>
+<body>
+
+<div class="counter" id="counter">0</div>
+
+<script>
+    // Hedef: 27 Nisan 2026, 11:00 (Türkiye saati, UTC+3) -> 100.000
+    const TARGET_TIME = new Date('2026-04-27T11:00:00+03:00').getTime();
+    const TARGET_VALUE = 100000;
+    const INCREMENT_INTERVAL_MS = 210 * 1000; // 3 dk 30 sn = 210 saniye
+
+    function calculateValue() {
+        const now = Date.now();
+        const diffMs = TARGET_TIME - now;
+        // Hedef zamana kalan tam 210 saniyelik dilim sayısı
+        const remainingTicks = Math.floor(diffMs / INCREMENT_INTERVAL_MS);
+        // Şu anki değer = hedef - kalan tick sayısı
+        return TARGET_VALUE - remainingTicks;
+    }
+
+    function formatNumber(n) {
+        // Türkçe binlik ayracı (nokta): 100.000
+        return n.toLocaleString('tr-TR');
+    }
+
+    const counterEl = document.getElementById('counter');
+
+    function update() {
+        counterEl.textContent = formatNumber(calculateValue());
+    }
+
+    // İlk yüklemede hemen göster
+    update();
+
+    // Saniyede bir kontrol et
+    setInterval(update, 1000);
+</script>
+
+</body>
+</html>
